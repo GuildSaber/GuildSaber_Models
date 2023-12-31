@@ -62,6 +62,8 @@ public class Guild
     public EGuildType             Type             { get; set; } = EGuildType.Unverified;
     public EGuildJoinRequirements JoinRequirements { get; set; } = new();
 
+    public ICollection<Category>? Categories { get; set; }
+
     [JsonIgnore]
     public ICollection<RankedScore>? RankedScores { get; set; }
     [JsonIgnore]
