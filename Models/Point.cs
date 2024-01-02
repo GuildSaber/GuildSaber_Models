@@ -10,18 +10,11 @@ namespace GuildSaber.Models;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "CollectionNeverUpdated.Global")]
-public class Point
+public class Point : SimplePoint
 {
     [NotMapped] [JsonIgnore] private List<(double, double)>? m_DeserializedAccCurve;
     [NotMapped] [JsonIgnore] private List<(double, double)>? m_DeserializedDiffCurve;
 
-    [Key]
-    public uint ID { get; set; }
-
-    [ForeignKey(nameof(Guild))]
-    public uint GuildID { get; set; }
-
-    [MinLength(2)] [MaxLength(15)] public string Name { get; set; } = string.Empty;
 
     public ModifierValuesStruct ModifierValues { get; set; } = new();
 
@@ -78,4 +71,17 @@ public class Point
         public float StrictAngles  { get; set; } = 0.00f;
         public float OldDots       { get; set; } = 0.00f;
     }
+}
+
+[SuppressMessage("ReSharper", "InconsistentNaming")]
+[SuppressMessage("ReSharper", "CollectionNeverUpdated.Global")]
+public class SimplePoint
+{
+    [Key]
+    public uint ID { get; set; }
+
+    [ForeignKey(nameof(Guild))]
+    public uint GuildID { get; set; }
+
+    [MinLength(2)] [MaxLength(15)] public string Name { get; set; } = string.Empty;
 }

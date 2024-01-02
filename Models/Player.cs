@@ -12,12 +12,6 @@ namespace GuildSaber.Models;
 [PrimaryKey(nameof(UserID))]
 public class Player
 {
-    public enum EPlatform
-    {
-        Steam  = 0,
-        Oculus = 1
-    }
-
     [ForeignKey(nameof(User))]
     public uint UserID { get; set; }
 

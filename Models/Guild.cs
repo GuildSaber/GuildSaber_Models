@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using GuildSaber.Enums;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,17 +11,6 @@ namespace GuildSaber.Models;
 [SuppressMessage("ReSharper", "CollectionNeverUpdated.Global")]
 public class Guild
 {
-    [Flags]
-    public enum EGuildType
-    {
-        None       = 0,
-        Unverified = 1 << 0,
-        Verified   = 1 << 1,
-        Featured   = 1 << 2,
-        Private    = 1 << 3,
-        All        = Unverified | Verified | Featured | Private
-    }
-
     public Guild() { }
 
     public Guild(Guild p_Guild, uint? p_RankedMapCount, uint? p_MemberCount)
@@ -42,6 +32,8 @@ public class Guild
         GuildBoostCollection = p_Guild.GuildBoostCollection;
         UnixCreationTime     = p_Guild.UnixCreationTime;
         InviteCode           = p_Guild.InviteCode;
+        Categories           = p_Guild.Categories;
+        CategoryLevels       = p_Guild.CategoryLevels;
 
         RankedMapCount = p_RankedMapCount;
         MemberCount    = p_MemberCount;

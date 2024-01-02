@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using GuildSaber.Enums;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
