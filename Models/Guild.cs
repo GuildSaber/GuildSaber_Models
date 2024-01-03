@@ -51,8 +51,9 @@ public class Guild
     public string Description { get; set; } = string.Empty;
     public uint   Color       { get; set; }
 
-    public EGuildType             Type             { get; set; } = EGuildType.Unverified;
-    public EGuildJoinRequirements JoinRequirements { get; set; } = new();
+    public EGuildType            Type             { get; set; } = EGuildType.Unverified;
+    public GuildJoinRequirements JoinRequirements { get; set; } = new();
+    public GuildFilters          Filters          { get; set; } = new();
 
     public ICollection<Category>? Categories { get; set; }
 
@@ -83,7 +84,7 @@ public class Guild
     [NotMapped] public uint? MemberCount    { get; set; }
 
     [Owned]
-    public class EGuildJoinRequirements
+    public class GuildJoinRequirements
     {
         [Flags]
         public enum ERequirements
@@ -104,5 +105,21 @@ public class Guild
         public uint          MinPP          { get; set; } = 0;
         public uint          MaxPP          { get; set; } = 0;
         public uint          AccountAgeUnix { get; set; } = 0;
+    }
+
+    [Owned]
+    public class GuildFilters
+    {
+        public uint  MinDifficulty  { get; set; } = 0;
+        public uint  MaxDifficulty  { get; set; } = 32;
+        public float DifficultyStep { get; set; } = 1f;
+
+        public uint MinBPM  { get; set; } = 0;
+        public uint MaxBPM  { get; set; } = 1000;
+        public uint BPMStep { get; set; } = 10;
+
+        public uint MinDuration  { get; set; } = 0;
+        public uint MaxDuration  { get; set; } = 1000;
+        public uint DurationStep { get; set; } = 10;
     }
 }
