@@ -6,6 +6,12 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace GuildSaber.ApiStruct;
 
+public class RankedMapWithScoreStruct
+{
+    required public RankedMap    RankedMap   { get; set; }
+    public          RankedScore? RankedScore { get; set; }
+}
+
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public class AddRankedMapApiStruct
 {
