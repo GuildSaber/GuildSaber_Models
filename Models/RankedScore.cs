@@ -211,13 +211,13 @@ public class RankedScoreWithWeight
 
     public uint ID { get; set; }
 
-    public uint ScoreID          { get; set; }
-    public uint PrevScoreID      { get; set; }
-    public uint RankedMapID      { get; set; }
-    public uint PointID          { get; set; }
-    public uint PlayerID         { get; set; }
-    public uint SongDifficultyID { get; set; }
-    public uint GuildID          { get; set; }
+    public uint  ScoreID          { get; set; }
+    public uint? PrevScoreID      { get; set; }
+    public uint  RankedMapID      { get; set; }
+    public uint  PointID          { get; set; }
+    public uint  PlayerID         { get; set; }
+    public uint  SongDifficultyID { get; set; }
+    public uint  GuildID          { get; set; }
 
     public EState State { get; set; }
 
