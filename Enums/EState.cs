@@ -6,8 +6,10 @@
 ///     When a ranked score doesn't, one of the Missing Requirements is set
 ///     When a User leaves/gets kicked/gets banned from the guild, the score get the removed flag
 ///     If the ranked score needs to be confirmed, the score get the pending flag
-///     When the ranked score that needs to be confirmed is confirmed, the score get the ScoringTeamConfirmed flag, otherwise it get the ScoringTeamDenied flag
-///     If the ScoringTeam decides to remove a ranked score, they can set the ScoringTeamDenied flag (so they can deny the score, and it won't have any effect until it's redone)
+///     When the ranked score that needs to be confirmed is confirmed, the score get the ScoringTeamConfirmed flag,
+///     otherwise it get the ScoringTeamDenied flag
+///     If the ScoringTeam decides to remove a ranked score, they can set the ScoringTeamDenied flag (so they can deny the
+///     score, and it won't have any effect until it's redone)
 /// </summary>
 [Flags]
 public enum EState
