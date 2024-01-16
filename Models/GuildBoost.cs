@@ -12,7 +12,7 @@ namespace GuildSaber.Models;
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "CollectionNeverUpdated.Global")]
 [PrimaryKey(nameof(UserID), nameof(GuildID))]
-public class GuildBoosts
+public class GuildBoost
 {
     [JsonIgnore]
     [ForeignKey(nameof(User))]

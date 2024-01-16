@@ -72,7 +72,7 @@ public class Guild
     [JsonIgnore]
     public ICollection<CategoryLevels>? CategoryLevels { get; set; }
     [JsonIgnore]
-    public ICollection<GuildBoosts>? GuildBoostCollection { get; set; }
+    public ICollection<GuildBoost>? GuildBoostCollection { get; set; }
 
     public                  ulong   UnixCreationTime { get; set; }
     [MaxLength(255)] public string? InviteCode       { get; set; }

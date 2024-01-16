@@ -25,5 +25,5 @@ public class User
     public ICollection<UserSession>? UserSessions { get; set; }
 
     public ESubscriptionTier         SubscriptionTier { get; set; } = ESubscriptionTier.Default;
-    public ICollection<GuildBoosts>? GuildBoosts      { get; set; } = null;
+    public ICollection<GuildBoost>? GuildBoosts      { get; set; } = null;
 }
