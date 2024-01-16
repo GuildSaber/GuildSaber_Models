@@ -25,12 +25,12 @@ public struct PlayerPointStatsStruct
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public struct PlayerResponseStruct
 {
-    public Player                                  Player;
-    public ICollection<GuildWithSimplifiedPoints>? Guilds;
+    public Player                              Player;
+    public ICollection<GuildWithSimplePoints>? Guilds;
 }
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
-public class GuildWithSimplifiedPoints : Guild
+public class GuildWithSimplePoints : Guild
 {
-    public List<SimplePoint>? SimplifiedPoints { get; set; }
+    public List<SimplePoint>? SimplePoints { get; set; }
 }
