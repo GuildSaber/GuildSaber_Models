@@ -11,7 +11,7 @@ public class RankedMapWithScoreStruct
 {
     required public RankedMap     RankedMap    { get; set; }
     public          RankedScore?  RankedScore  { get; set; }
-    public          SimplePoint[] SimplePoints { get; set; }
+    public          SimplePoint[] SimplePoints { get; set; } = Array.Empty<SimplePoint>();
 }
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
