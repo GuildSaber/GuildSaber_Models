@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using GuildSaber.Enums;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
@@ -9,15 +10,6 @@ namespace GuildSaber.Models;
 [SuppressMessage("ReSharper", "CollectionNeverUpdated.Global")]
 public sealed class SongDifficulty
 {
-    public enum EDifficulty
-    {
-        Easy       = 1,
-        Normal     = 3,
-        Hard       = 5,
-        Expert     = 7,
-        ExpertPlus = 9
-    }
-
     [Key]
     public uint ID { get; set; }
 

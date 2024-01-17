@@ -25,7 +25,7 @@ public class AddRankedMapApiStruct
     [MinLength(40)] [MaxLength(40)] [DefaultValue("C4CCC41A43BB15F252B025F03BCE6F9C1DBBDBEB")]
     public string MapHash { get; set; } = string.Empty;
     [DefaultValue(9)]
-    public SongDifficulty.EDifficulty Difficulty { get; set; } = SongDifficulty.EDifficulty.ExpertPlus;
+    public EDifficulty Difficulty { get; set; } = EDifficulty.ExpertPlus;
 
     [DefaultValue(null)]
     public uint? GameModeID { get; set; }

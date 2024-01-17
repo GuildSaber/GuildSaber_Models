@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace GuildSaber.Models;
 
-/// <summary>
+/*/// <summary>
 ///     BeatLeader Score Statistic model
 /// </summary>
 [Owned]
@@ -16,7 +16,7 @@ public class Trackers
     public WinTracker?        WinTracker      { get; set; } = null;
     public AccuracyTracker?   AccuracyTracker { get; set; } = null;
     public ScoreGraphTracker? GraphTracker    { get; set; } = null;
-}
+}*/
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public class HitTracker
