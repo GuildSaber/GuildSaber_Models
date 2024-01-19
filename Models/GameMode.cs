@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+#if GUILDSABER_SERVER
+using System.ComponentModel.DataAnnotations;
+#endif
 
 namespace GuildSaber.Models;
 
@@ -9,8 +11,13 @@ public class GameMode
 {
     public static readonly string[] DEFAULT_GAMEMODES = { "Standard", "Lawless", "OneSaber", "90Degree", "360Degree", "NoArrows", "Generated360Degree", "Generated90Degree" };
 
+#if GUILDSABER_SERVER
     [Key]
+#endif
     public uint ID { get; set; }
 
-    [StringLength(128)] public string Name { get; set; } = string.Empty;
+#if GUILDSABER_SERVER
+    [StringLength(128)]
+#endif
+    public string Name { get; set; } = string.Empty;
 }

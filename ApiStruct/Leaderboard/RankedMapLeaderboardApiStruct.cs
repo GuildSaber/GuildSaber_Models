@@ -7,6 +7,15 @@ namespace GuildSaber.ApiStruct.Leaderboard;
 [SuppressMessage("ReSharper", "CollectionNeverUpdated.Global")]
 public class RankedMapLeaderboardApiStruct
 {
-    required public Player      Player      { get; set; }
+#if GUILDSABER_SERVER
+    required public Player Player { get; set; }
+#else
+    public Player Player { get; set; } = null!;
+#endif
+
+#if GUILDSABER_SERVER
     required public RankedScore RankedScore { get; set; }
+#else
+    public RankedScore RankedScore { get; set; } = null!;
+#endif
 }
