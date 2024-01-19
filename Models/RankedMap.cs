@@ -15,7 +15,7 @@ namespace GuildSaber.Models;
 public class RankedMap
 {
     [Flags]
-    public enum ECustomModifierRating
+    public enum ECustomModRatingFlag
     {
         None          = 0,
         SlowSong      = 1 << 0,
@@ -71,13 +71,13 @@ public class RankedMap
     public class RankedMapDifficultyRating
     {
         [JsonIgnore]
-        required public ModifiersRating m_Modifiers { get; set; }
+        required public ModifiersRating Modifiers { get; set; }
 
-        public ECustomModifierRating CustomModifiersRating { get; set; } = ECustomModifierRating.None;
+        public ECustomModRatingFlag EnabledCustomModRatingFlag { get; set; } = ECustomModRatingFlag.None;
 
         public InRating Default { get; set; } = new();
 
-        [NotMapped]
+        /*[NotMapped]
         public ModifiersRating? Modifiers
         {
             get
@@ -109,7 +109,7 @@ public class RankedMap
 
                 return l_ReturnValue;
             }
-        }
+        }*/
     }
 
     [Owned]
