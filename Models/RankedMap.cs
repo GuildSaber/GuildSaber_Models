@@ -1,11 +1,15 @@
 ﻿using GuildSaber.Defaults;
 using GuildSaber.Enums;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+#if GUILDSABER_SERVER
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System.ComponentModel;
+#endif
+#if GUILDSABER_SERVER
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace GuildSaber.Models;
 
@@ -23,23 +27,41 @@ public class RankedMap
         SuperFastSong = 1 << 2
     }
 
+#if GUILDSABER_SERVER
     [Key]
+#endif
     public uint ID { get; set; }
 
+#if GUILDSABER_SERVER
     [ForeignKey(nameof(Guild))]
+#endif
     public uint GuildID { get; set; }
 
-    public          ERankingState             RankingState { get; set; }
+    public ERankingState RankingState { get; set; }
+
+#if GUILDSABER_SERVER
     required public RequirementStruct         Requirements { get; set; }
     required public RankedMapDifficultyRating Rating       { get; set; }
+#else
+    public RequirementStruct         Requirements { get; set; } = null!;
+    public RankedMapDifficultyRating Rating       { get; set; } = null!;
+#endif
 
     public uint UnixCreationTime { get; set; }
     public uint UnixEditTime     { get; set; }
 
+#if GUILDSABER_SERVER
     [JsonIgnore]
     public Guild? Guild { get; set; }
+#endif
 
+#if GUILDSABER_SERVER
     public ICollection<RankedMapVersion>? RankedMapVersions { get; set; }
+#else
+    public RankedMapVersion[]? RankedMapVersions { get; set; }
+#endif
+
+#if GUILDSABER_SERVER
     [JsonIgnore]
     public ICollection<Tag>? Tags { get; set; }
     [JsonIgnore]
@@ -48,11 +70,14 @@ public class RankedMap
     public ICollection<Playlist>? Playlists { get; set; }
     [JsonIgnore]
     public ICollection<Category>? Categories { get; set; }
+#endif
 
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
 
+#if GUILDSABER_SERVER
     [Owned]
+#endif
     public class RequirementStruct
     {
         [DefaultValue(false)] public bool DoesNeedConfirmation { get; set; } = false;
@@ -67,68 +92,55 @@ public class RankedMap
         public float MinAccuracy { get; set; }
     }
 
+#if GUILDSABER_SERVER
     [Owned]
+#endif
     public class RankedMapDifficultyRating
     {
+#if GUILDSABER_SERVER
         [JsonIgnore]
         required public ModifiersRating Modifiers { get; set; }
+#endif
 
         public ECustomModRatingFlag EnabledCustomModRatingFlag { get; set; } = ECustomModRatingFlag.None;
 
         public InRating Default { get; set; } = new();
-
-        /*[NotMapped]
-        public ModifiersRating? Modifiers
-        {
-            get
-            {
-                if (CustomModifiersRating == ECustomModifierRating.None)
-                    return null;
-
-                var l_ReturnValue = new ModifiersRating();
-
-                foreach (var p_Flags in Enum.GetValues(typeof(ECustomModifierRating)).Cast<ECustomModifierRating>().Where(p_Value => (p_Value & CustomModifiersRating) != 0))
-                {
-                    switch (p_Flags)
-                    {
-                        case ECustomModifierRating.SlowSong:
-                            l_ReturnValue.SlowerSong = new InRating { Stars = m_Modifiers?.SlowerSong?.Stars ?? new Stars() };
-                            break;
-                        case ECustomModifierRating.FasterSong:
-                            l_ReturnValue.FasterSong = new InRating { Stars = m_Modifiers?.FasterSong?.Stars ?? new Stars() };
-                            break;
-                        case ECustomModifierRating.SuperFastSong:
-                            l_ReturnValue.SuperFastSong = new InRating { Stars = m_Modifiers?.SuperFastSong?.Stars ?? new Stars() };
-                            break;
-                        case ECustomModifierRating.None:
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-                }
-
-                return l_ReturnValue;
-            }
-        }*/
     }
 
+#if GUILDSABER_SERVER
     [Owned]
+#endif
+    /* [NotNull] Are for EFCore design time */
     public class ModifiersRating
     {
-        [NotNull] public InRating? SlowerSong    { get; set; }
-        [NotNull] public InRating? FasterSong    { get; set; }
-        [NotNull] public InRating? SuperFastSong { get; set; }
+#if GUILDSABER_SERVER
+        [NotNull]
+#endif
+        public InRating? SlowerSong { get; set; }
+#if GUILDSABER_SERVER
+        [NotNull]
+#endif
+        public InRating? FasterSong { get; set; }
+#if GUILDSABER_SERVER
+        [NotNull]
+#endif
+        public InRating? SuperFastSong { get; set; }
     }
 
+#if GUILDSABER_SERVER
     [Owned]
+#endif
     public class Stars
     {
+#if GUILDSABER_SERVER
         [JsonIgnore] public float m_Difficulty { get; set; }
         [JsonIgnore] public float m_Acc        { get; set; }
 
         [JsonIgnore] public float HiddenScaling_Difficulty { get; set; }
         [JsonIgnore] public float HiddenScaling_Acc        { get; set; }
+#endif
 
+#if GUILDSABER_SERVER
         [Range(0, float.MaxValue)] [DefaultValue(null)] [NotMapped] public decimal? Difficulty
         {
             get => Math.Round((decimal)(m_Difficulty * HiddenScaling_Difficulty), 2);
@@ -150,16 +162,24 @@ public class RankedMap
                 m_Acc = (float)value;
             }
         }
+
+#else
+        public decimal? Difficulty { get; set; }
+        public decimal? Acc        { get; set; }
+#endif
     }
 
+#if GUILDSABER_SERVER
     [Owned]
+#endif
     public class InRating
     {
+        public Stars Stars { get; set; } = new();
+#if GUILDSABER_SERVER
         [JsonIgnore] public float Pass         { get; set; } = 0;
         [JsonIgnore] public float Acc          { get; set; } = 0;
         [JsonIgnore] public float Tech         { get; set; } = 0;
         [JsonIgnore] public float PredictedAcc { get; set; } = 0;
-
-        public Stars Stars { get; set; } = new();
+#endif
     }
 }

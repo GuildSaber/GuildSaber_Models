@@ -1,7 +1,6 @@
 ﻿<wpf:ResourceDictionary xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                         xmlns:s="clr-namespace:System;assembly=mscorlib"
-                        xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                        xml:space="preserve">
+                        xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xml:space="preserve">
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=BL/@EntryIndexedValue">BL</s:String>
     <s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=EHMD/@EntryIndexedValue">EHMD</s:String>
     <s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=HP/@EntryIndexedValue">HP</s:String>
@@ -9,6 +8,7 @@
     <s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=XR/@EntryIndexedValue">XR</s:String>
     <s:Boolean x:Key="/Default/UserDictionary/Words/=EHMD/@EntryIndexedValue">True</s:Boolean>
     <s:Boolean x:Key="/Default/UserDictionary/Words/=Etee/@EntryIndexedValue">True</s:Boolean>
+    <s:Boolean x:Key="/Default/UserDictionary/Words/=FORMATTABLE/@EntryIndexedValue">True</s:Boolean>
     <s:Boolean x:Key="/Default/UserDictionary/Words/=GAMEMODES/@EntryIndexedValue">True</s:Boolean>
     <s:Boolean x:Key="/Default/UserDictionary/Words/=Huaweivr/@EntryIndexedValue">True</s:Boolean>
     <s:Boolean x:Key="/Default/UserDictionary/Words/=Hypereal/@EntryIndexedValue">True</s:Boolean>

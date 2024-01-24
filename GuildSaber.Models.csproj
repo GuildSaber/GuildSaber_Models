@@ -1,15 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>GuildSaber</RootNamespace>
+        <LangVersion>11</LangVersion>
+        <TargetFrameworks>net8.0;netstandard2.0</TargetFrameworks>
+        <ParentDirectoryName>$([System.IO.Path]::GetFileName('$([System.IO.Path]::GetDirectoryName('$(MSBuildProjectDirectory)'))'))</ParentDirectoryName>
     </PropertyGroup>
 
-    <ItemGroup>
+    <PropertyGroup>
+        <IsGuildSaberServer Condition="$(ParentDirectoryName) == 'GuildSaber_Server'">true</IsGuildSaberServer>
+        <IsGuildSaberServer Condition="$(ParentDirectoryName) != 'GuildSaber_Server'">false</IsGuildSaberServer>
+    </PropertyGroup>
+
+    <Target Name="CheckProjectDirectory" BeforeTargets="Build" Condition="'$(IsGuildSaberServer)' == 'true'">
+        <Message Text="The project is in the GuildSaber_Server directory. Compiling with the server dependencies (server mode)" Importance="high"/>
+    </Target>
+
+    <Target Name="CheckProjectDirectory" BeforeTargets="Build" Condition="'$(IsGuildSaberServer)' == 'false'">
+        <Message Text="The project is not the GuildSaber_Server directory. Compiling without any server dependencies (client mode)" Importance="high"/>
+    </Target>
+
+    <PropertyGroup Condition="'$(TargetFramework)'=='net8.0' And $(IsGuildSaberServer)">
+        <DefineConstants>GUILDSABER_SERVER</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='net8.0' And $(IsGuildSaberServer)">
         <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.0"/>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
     </ItemGroup>
 
     <PropertyGroup>

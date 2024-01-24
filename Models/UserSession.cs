@@ -1,16 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+#if GUILDSABER_SERVER
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace GuildSaber.Models;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "CollectionNeverUpdated.Global")]
+#if GUILDSABER_SERVER
 [PrimaryKey(nameof(UserID), nameof(SessionID))]
+#endif
 public class UserSession
 {
     /* Primary Keys */
+#if GUILDSABER_SERVER
     [ForeignKey(nameof(User))]
+#endif
     public uint UserID { get;    set; }
     public uint SessionID { get; set; }
 

@@ -1,9 +1,14 @@
 ﻿using GuildSaber.Enums;
+using System.Diagnostics.CodeAnalysis;
+#if GUILDSABER_SERVER
 using Newtonsoft.Json;
+#endif
+
+#if GUILDSABER_SERVER
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+#endif
 
 namespace GuildSaber.Models;
 
@@ -17,6 +22,7 @@ public class RankedScore : IComparable<RankedScore>
     ///////////////////////// SQL FormattableStrings ///////////////////////////
     ////////////////////////////////////////////////////////////////////////////
 
+#if GUILDSABER_SERVER
     // ReSharper disable once UseRawString
     public const string UPDATE_RANK_FORMATTABLE_STRING = @"
         UPDATE RankedScores AS rs
@@ -34,38 +40,25 @@ public class RankedScore : IComparable<RankedScore>
         ON rs.ID = subquery.ID
         SET rs.Rank = subquery.NewRank
         WHERE rs.RankedMapID = {0}";
+#endif
 
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
 
+#if GUILDSABER_SERVER
     [Key]
+#endif
     public uint ID { get; set; }
 
-    [JsonIgnore]
-    [ForeignKey(nameof(Score))]
-    public uint ScoreID { get; set; }
-
-    [JsonIgnore]
-    [ForeignKey(nameof(PrevScore))]
-    public uint? PrevScoreID { get; set; }
-
-    [JsonIgnore]
-    [ForeignKey(nameof(RankedMap))]
-    public uint RankedMapID { get; set; }
-
+#if GUILDSABER_SERVER
     [ForeignKey(nameof(Point))]
+#endif
     public uint PointID { get; set; }
 
+#if GUILDSABER_SERVER
     [ForeignKey(nameof(Player))]
+#endif
     public uint PlayerID { get; set; }
-
-    [JsonIgnore]
-    [ForeignKey(nameof(SongDifficulty))]
-    public uint SongDifficultyID { get; set; }
-
-    [JsonIgnore]
-    [ForeignKey(nameof(Guild))]
-    public uint GuildID { get; set; }
 
     public Score?          Score          { get; set; }
     public Score?          PrevScore      { get; set; } = null;
@@ -79,12 +72,20 @@ public class RankedScore : IComparable<RankedScore>
     public uint  CreatedUnixTime  { get; set; }
     public uint  ModifiedUnixTime { get; set; }
 
+#if GUILDSABER_SERVER
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+#endif
     public uint Rank { get; set; }
 
     /* Calculated Field (Use RankedScoreWithWeight to set it's value) */
-    [NotMapped] public float Weight    { get; set; } = 1;
-    [NotMapped] public uint  RowNumber { get; set; }
+#if GUILDSABER_SERVER
+    [NotMapped]
+#endif
+    public float Weight { get; set; } = 1;
+#if GUILDSABER_SERVER
+    [NotMapped]
+#endif
+    public uint RowNumber { get; set; }
 
     /* Implemented for the IComparable interface, to sort the scores too */
     public int CompareTo(RankedScore? other)
@@ -141,8 +142,18 @@ public class RankedScore : IComparable<RankedScore>
 
         return l_RawPointsComparison > 0 || p_Left.EffectiveScore >= p_Right.EffectiveScore;
     }
+
+#if GUILDSABER_SERVER
+    [JsonIgnore] [ForeignKey(nameof(Score))]          public uint  ScoreID          { get; set; }
+    [JsonIgnore] [ForeignKey(nameof(PrevScore))]      public uint? PrevScoreID      { get; set; }
+    [JsonIgnore] [ForeignKey(nameof(RankedMap))]      public uint  RankedMapID      { get; set; }
+    [JsonIgnore] [ForeignKey(nameof(SongDifficulty))] public uint  SongDifficultyID { get; set; }
+    [JsonIgnore] [ForeignKey(nameof(Guild))]          public uint  GuildID          { get; set; }
+#endif
 }
 
+/* Class only used by the server to query data with calculated fields */
+#if GUILDSABER_SERVER
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public class RankedScoreWithWeight
 {
@@ -241,3 +252,4 @@ public class RankedScoreWithWeight
             ? FormattableStringFactory.Create(JOIN_WEIGHT_CATEGORY_QUERY, p_PointID, p_CategoryID)
             : FormattableStringFactory.Create(JOIN_WEIGHT_QUERY, p_PointID);
 }
+#endif

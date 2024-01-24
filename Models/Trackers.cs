@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+#if GUILDSABER_SERVER
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace GuildSaber.Models;
 
@@ -21,9 +23,9 @@ public class Trackers
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public class HitTracker
 {
-    [Required]
-    [Key]
-    [ForeignKey(nameof(Score))]
+#if GUILDSABER_SERVER
+    [Required] [Key] [ForeignKey(nameof(Score))]
+#endif
     public uint ScoreID { get; set; }
 
     public int   MaxCombo     { get; set; }
@@ -41,9 +43,9 @@ public class HitTracker
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public class WinTracker
 {
-    [Required]
-    [Key]
-    [ForeignKey(nameof(Score))]
+#if GUILDSABER_SERVER
+    [Required] [Key] [ForeignKey(nameof(Score))]
+#endif
     public uint ScoreID { get; set; }
 
     public bool             Won                 { get; set; }
@@ -57,7 +59,9 @@ public class WinTracker
     public int              MaxScore            { get; set; }
 }
 
+#if GUILDSABER_SERVER
 [Owned]
+#endif
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public class AveragePosition
 {
@@ -69,9 +73,9 @@ public class AveragePosition
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public class AccuracyTracker
 {
-    [Required]
-    [Key]
-    [ForeignKey(nameof(Score))]
+#if GUILDSABER_SERVER
+    [Required] [Key] [ForeignKey(nameof(Score))]
+#endif
     public uint ScoreID { get; set; }
 
     public float  AccRight            { get; set; }
@@ -92,9 +96,9 @@ public class AccuracyTracker
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public class ScoreGraphTracker
 {
-    [Required]
-    [Key]
-    [ForeignKey(nameof(Score))]
+#if GUILDSABER_SERVER
+    [Required] [Key] [ForeignKey(nameof(Score))]
+#endif
     public uint ScoreID { get; set; }
 
     public string Graph { get; set; } = string.Empty; /* format List<float> */

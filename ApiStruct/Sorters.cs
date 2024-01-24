@@ -1,9 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿#if GUILDSABER_SERVER
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+#endif
 
 namespace GuildSaber.ApiStruct;
 
+#if GUILDSABER_SERVER
 [JsonConverter(typeof(StringEnumConverter))]
+#endif
 public enum EGuildSorters
 {
     ID           = 0,

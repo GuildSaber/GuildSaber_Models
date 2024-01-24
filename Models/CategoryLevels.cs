@@ -1,6 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Diagnostics.CodeAnalysis;
+#if GUILDSABER_SERVER
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace GuildSaber.Models;
 
@@ -8,13 +10,19 @@ namespace GuildSaber.Models;
 [SuppressMessage("ReSharper", "CollectionNeverUpdated.Global")]
 public class CategoryLevels
 {
+#if GUILDSABER_SERVER
     [Key]
+#endif
     public uint ID { get; set; }
 
+#if GUILDSABER_SERVER
     [ForeignKey(nameof(Category))]
+#endif
     public uint CategoryID { get; set; }
 
+#if GUILDSABER_SERVER
     [ForeignKey(nameof(Guild))]
+#endif
     public uint GuildID { get; set; }
 
     public uint  Value     { get; set; }

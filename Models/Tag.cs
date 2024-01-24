@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+#if GUILDSABER_SERVER
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace GuildSaber.Models;
 
@@ -9,12 +11,15 @@ namespace GuildSaber.Models;
 [SuppressMessage("ReSharper", "ClassWithVirtualMembersNeverInherited.Global")]
 public class Tag
 {
+#if GUILDSABER_SERVER
     [Key]
+#endif
     public uint ID { get; set; }
 
     public string  Name        { get; set; } = string.Empty;
     public string? Description { get; set; }
 
-    [JsonIgnore]
-    public ICollection<RankedMap>? RankedMaps { get; set; } = null;
+#if GUILDSABER_SERVER
+    [JsonIgnore] public ICollection<RankedMap>? RankedMaps { get; set; } = null;
+#endif
 }
