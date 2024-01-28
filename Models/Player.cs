@@ -28,6 +28,7 @@ public class Player
     public string Name { get;        set; } = string.Empty;
     public EPlatform Platform { get; set; }
     public EHMD      HMD      { get; set; } = EHMD.Unknown;
+    public string    Country  { get; set; } = "Unknown";
 
 #if GUILDSABER_SERVER
     public string? User_AvatarUrl { get => User?.AvatarUrl; }

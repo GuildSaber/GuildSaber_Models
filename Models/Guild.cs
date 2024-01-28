@@ -84,11 +84,7 @@ public class Guild
     public GuildJoinRequirements JoinRequirements { get; set; } = new();
     public GuildFilters          Filters          { get; set; } = new();
 
-#if GUILDSABER_SERVER
     public ICollection<Category>? Categories { get; set; }
-#else
-    public Category[]? Categories { get; set; }
-#endif
 
 #if GUILDSABER_SERVER
     [JsonIgnore] public ICollection<RankedScore>?    RankedScores         { get; set; }
