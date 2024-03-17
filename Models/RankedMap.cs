@@ -63,7 +63,7 @@ public class RankedMap
 
 #if GUILDSABER_SERVER
     [JsonIgnore]
-    public ICollection<Tag>? Tags { get; set; }
+    public ICollection<RankedTag>? Tags { get; set; }
     [JsonIgnore]
     public ICollection<RankedScore>? RankedScores { get; set; }
     [JsonIgnore]

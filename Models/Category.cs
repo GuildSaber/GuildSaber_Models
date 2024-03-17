@@ -25,5 +25,5 @@ public class Category
     public Guild? Guild { get; set; } = null;
 
     public ICollection<RankedMap>?      RankedMaps     { get; set; }
-    public ICollection<CategoryLevels>? CategoryLevels { get; set; }
+    public ICollection<CategoryLevel>? CategoryLevels { get; set; }
 }

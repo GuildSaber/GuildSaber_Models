@@ -8,7 +8,7 @@ namespace GuildSaber.Models;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 [SuppressMessage("ReSharper", "CollectionNeverUpdated.Global")]
-public class CategoryLevels
+public class CategoryLevel
 {
 #if GUILDSABER_SERVER
     [Key]
@@ -25,6 +25,6 @@ public class CategoryLevels
 #endif
     public uint GuildID { get; set; }
 
-    public uint  Value     { get; set; }
-    public ulong DiscordID { get; set; }
+    public float  Threshold { get; set; }
+    public ulong? DiscordID { get; set; }
 }

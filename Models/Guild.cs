@@ -15,16 +15,23 @@ public class Guild
 {
     public Guild() { }
 
-#if GUILDSABER_SERVER
     public Guild(Guild p_Guild, uint? p_RankedMapCount, uint? p_MemberCount)
     {
-        ID                   = p_Guild.ID;
-        Name                 = p_Guild.Name;
-        SmallName            = p_Guild.SmallName;
-        Description          = p_Guild.Description;
-        Color                = p_Guild.Color;
-        Type                 = p_Guild.Type;
-        JoinRequirements     = p_Guild.JoinRequirements;
+        ID               = p_Guild.ID;
+        Name             = p_Guild.Name;
+        SmallName        = p_Guild.SmallName;
+        Description      = p_Guild.Description;
+        Color            = p_Guild.Color;
+        Type             = p_Guild.Type;
+        JoinRequirements = p_Guild.JoinRequirements;
+        UnixCreationTime = p_Guild.UnixCreationTime;
+        InviteCode       = p_Guild.InviteCode;
+        Categories       = p_Guild.Categories;
+
+        RankedMapCount = p_RankedMapCount;
+        MemberCount    = p_MemberCount;
+
+#if GUILDSABER_SERVER
         RankedScores         = p_Guild.RankedScores;
         RankedMaps           = p_Guild.RankedMaps;
         Members              = p_Guild.Members;
@@ -33,32 +40,9 @@ public class Guild
         Levels               = p_Guild.Levels;
         CategoryLevels       = p_Guild.CategoryLevels;
         GuildBoostCollection = p_Guild.GuildBoostCollection;
-        UnixCreationTime     = p_Guild.UnixCreationTime;
-        InviteCode           = p_Guild.InviteCode;
-        Categories           = p_Guild.Categories;
         CategoryLevels       = p_Guild.CategoryLevels;
-
-        RankedMapCount = p_RankedMapCount;
-        MemberCount    = p_MemberCount;
-    }
-#else
-    public Guild(Guild p_Guild, uint? p_RankedMapCount, uint? p_MemberCount)
-    {
-        ID = p_Guild.ID;
-        Name = p_Guild.Name;
-        SmallName = p_Guild.SmallName;
-        Description = p_Guild.Description;
-        Color = p_Guild.Color;
-        Type = p_Guild.Type;
-        JoinRequirements = p_Guild.JoinRequirements;
-        UnixCreationTime = p_Guild.UnixCreationTime;
-        InviteCode = p_Guild.InviteCode;
-        Categories = p_Guild.Categories;
-
-        RankedMapCount = p_RankedMapCount;
-        MemberCount = p_MemberCount;
-    }
 #endif
+    }
 
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
@@ -81,20 +65,22 @@ public class Guild
     public uint   Color       { get; set; }
 
     public EGuildType            Type             { get; set; } = EGuildType.Unverified;
+    public ELevelingOptions      LevelingOptions  { get; set; } = ELevelingOptions.XpBased;
     public GuildJoinRequirements JoinRequirements { get; set; } = new();
     public GuildFilters          Filters          { get; set; } = new();
 
-    public ICollection<Category>? Categories { get; set; }
+    public ICollection<Category>?  Categories { get; set; }
+    public ICollection<RankedTag>? RankedTags { get; set; }
 
 #if GUILDSABER_SERVER
-    [JsonIgnore] public ICollection<RankedScore>?    RankedScores         { get; set; }
-    [JsonIgnore] public ICollection<RankedMap>?      RankedMaps           { get; set; }
-    [JsonIgnore] public ICollection<Member>?         Members              { get; set; }
-    [JsonIgnore] public ICollection<Playlist>?       Playlists            { get; set; }
-    [JsonIgnore] public ICollection<Point>?          Points               { get; set; }
-    [JsonIgnore] public ICollection<Level>?          Levels               { get; set; }
-    [JsonIgnore] public ICollection<CategoryLevels>? CategoryLevels       { get; set; }
-    [JsonIgnore] public ICollection<GuildBoost>?     GuildBoostCollection { get; set; }
+    [JsonIgnore] public ICollection<RankedScore>?   RankedScores         { get; set; }
+    [JsonIgnore] public ICollection<RankedMap>?     RankedMaps           { get; set; }
+    [JsonIgnore] public ICollection<Member>?        Members              { get; set; }
+    [JsonIgnore] public ICollection<Playlist>?      Playlists            { get; set; }
+    [JsonIgnore] public ICollection<Point>?         Points               { get; set; }
+    [JsonIgnore] public ICollection<Level>?         Levels               { get; set; }
+    [JsonIgnore] public ICollection<CategoryLevel>? CategoryLevels       { get; set; }
+    [JsonIgnore] public ICollection<GuildBoost>?    GuildBoostCollection { get; set; }
 #endif
     public ulong UnixCreationTime { get; set; }
 
@@ -102,6 +88,11 @@ public class Guild
     [MaxLength(255)]
 #endif
     public string? InviteCode { get; set; }
+    /// <summary>
+    /// Enforce the fact that scores are always newer than the joined date of a player
+    /// </summary>
+    public bool OnlyAllowNewScores { get;            set; } = false;
+    public bool DisableScoreSaberScoreImports { get; set; } = false;
 
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////

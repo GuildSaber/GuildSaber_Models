@@ -40,5 +40,7 @@ public enum EIncludeFlags : ulong
     UserSessions             = 1 << 25,
     PrevScores               = 1 << 26,
     PrevScoreTrackers        = 1 << 27,
+    PlayerLevelStats         = 1 << 28,
+    PlayerCategoryLevelStats = 1 << 29,
     All                      = ~0ul
 }

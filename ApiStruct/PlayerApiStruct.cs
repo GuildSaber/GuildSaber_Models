@@ -13,13 +13,36 @@ public struct PlayerAtMeStruct
 }
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
+public struct PlayerGuildStatsStruct
+{
+    public ICollection<PlayerPointStatsStruct>         PlayerPointStats;
+    public ICollection<PlayerCategoryPointStatsStruct> PlayerCategoryPointStats;
+    public PlayerLevelStat                             PlayerLevelStats;
+
+    public ICollection<PlayerCategoryLevelStat> PlayerCategoryLevelStats;
+    // Maybe there will be PlayerGuildBadge someday :shrug:
+}
+
+[SuppressMessage("ReSharper", "InconsistentNaming")]
 public struct PlayerPointStatsStruct
 {
-    public uint  PlayerID;
-    public uint  PointID;
-    public uint  Rank;
-    public uint  ValidPassCount;
-    public float PointValue;
+    public uint   PointID;
+    public string PointName;
+    public uint   Rank;
+    public uint   ValidPassCount;
+    public float  PointValue;
+}
+
+[SuppressMessage("ReSharper", "InconsistentNaming")]
+public struct PlayerCategoryPointStatsStruct
+{
+    public uint   CategoryID;
+    public string CategoryName;
+    public uint   PointID;
+    public string PointName;
+    public uint   Rank;
+    public uint   ValidPassCount;
+    public float  PointValue;
 }
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]

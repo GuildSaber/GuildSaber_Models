@@ -44,5 +44,7 @@ public class Player
     [JsonIgnore] public ICollection<Member>?                  MemberList               { get; set; } = null;
     [JsonIgnore] public ICollection<PlayerPointStat>?         PlayerPointStats         { get; set; } = null;
     [JsonIgnore] public ICollection<PlayerCategoryPointStat>? PlayerCategoryPointStats { get; set; } = null;
+    [JsonIgnore] public ICollection<PlayerLevelStat>?         PlayerLevelStats         { get; set; } = null;
+    [JsonIgnore] public ICollection<PlayerCategoryLevelStat>? PlayerCategoryLevelStats { get; set; } = null;
 #endif
 }
