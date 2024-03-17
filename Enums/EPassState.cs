@@ -12,7 +12,7 @@
 ///     score, and it won't have any effect until it's redone)
 /// </summary>
 [Flags]
-public enum EState
+public enum EPassState
 {
     UnVerified           = 0,
     Allowed              = 1 << 0,

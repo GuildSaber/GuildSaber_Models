@@ -25,21 +25,18 @@ public class RankedScore : IComparable<RankedScore>
 #if GUILDSABER_SERVER
     // ReSharper disable once UseRawString
     public const string UPDATE_RANK_FORMATTABLE_STRING = @"
-        UPDATE RankedScores AS rs
-        JOIN (
-            SELECT ID, DENSE_RANK() OVER (
-                PARTITION BY RankedMapID, PointID
-                ORDER BY CASE
-                    WHEN State = 1 THEN 1 -- Prioritize State = 1
-                    ELSE 2 -- For all other states
-                END ASC, RawPoints DESC, EffectiveScore DESC
-            ) AS NewRank
-            FROM RankedScores
-            WHERE RankedMapID = {0}
-        ) AS subquery
-        ON rs.ID = subquery.ID
-        SET rs.Rank = subquery.NewRank
-        WHERE rs.RankedMapID = {0}";
+                UPDATE RankedScores AS rs
+                JOIN (
+                    SELECT ID, DENSE_RANK() OVER (
+                        PARTITION BY RankedMapID, PointID
+                        ORDER BY IF(State = 1, 1, 2), RawPoints DESC, EffectiveScore DESC
+                    ) AS NewRank
+                    FROM RankedScores
+                    WHERE RankedMapID = {0}
+                ) AS subquery
+                ON rs.ID = subquery.ID
+                SET rs.Rank = subquery.NewRank
+                WHERE rs.RankedMapID = {0}";
 #endif
 
     ////////////////////////////////////////////////////////////////////////////
@@ -65,7 +62,7 @@ public class RankedScore : IComparable<RankedScore>
     public RankedMap?      RankedMap      { get; set; }
     public Point?          Point          { get; set; } = null;
     public SongDifficulty? SongDifficulty { get; set; }
-    public EState          State          { get; set; }
+    public EPassState          m_PassState          { get; set; }
 
     public uint  EffectiveScore   { get; set; }
     public float RawPoints        { get; set; }
@@ -93,10 +90,10 @@ public class RankedScore : IComparable<RankedScore>
         if (other is null) return 1;
 
         var l_RawPointsComparison = RawPoints.CompareTo(other.RawPoints);
-        if (State == other.State) return l_RawPointsComparison == 0 ? EffectiveScore.CompareTo(other.EffectiveScore) : l_RawPointsComparison;
-        if (State == EState.Allowed) return -1;
+        if (m_PassState == other.m_PassState) return l_RawPointsComparison == 0 ? EffectiveScore.CompareTo(other.EffectiveScore) : l_RawPointsComparison;
+        if (m_PassState == EPassState.Allowed) return -1;
 
-        return other.State == EState.Allowed ? 1 : l_RawPointsComparison == 0 ? EffectiveScore.CompareTo(other.EffectiveScore) : l_RawPointsComparison;
+        return other.m_PassState == EPassState.Allowed ? 1 : l_RawPointsComparison == 0 ? EffectiveScore.CompareTo(other.EffectiveScore) : l_RawPointsComparison;
     }
 
     /* Operator overwrites are used for the sorting, to tell which scores are simply better than others in most situation */
@@ -106,9 +103,9 @@ public class RankedScore : IComparable<RankedScore>
     public static bool operator <(RankedScore p_Left, RankedScore p_Right)
     {
         var l_RawPointsComparison = p_Left.RawPoints.CompareTo(p_Right.RawPoints);
-        if (p_Left.State  == p_Right.State) return l_RawPointsComparison == 0 ? p_Left.EffectiveScore < p_Right.EffectiveScore : l_RawPointsComparison < 0;
-        if (p_Left.State  == EState.Allowed) return false;
-        if (p_Right.State == EState.Allowed) return true;
+        if (p_Left.m_PassState  == p_Right.m_PassState) return l_RawPointsComparison == 0 ? p_Left.EffectiveScore < p_Right.EffectiveScore : l_RawPointsComparison < 0;
+        if (p_Left.m_PassState  == EPassState.Allowed) return false;
+        if (p_Right.m_PassState == EPassState.Allowed) return true;
 
         return l_RawPointsComparison < 0 || p_Left.EffectiveScore < p_Right.EffectiveScore;
     }
@@ -116,9 +113,9 @@ public class RankedScore : IComparable<RankedScore>
     public static bool operator >(RankedScore p_Left, RankedScore p_Right)
     {
         var l_RawPointsComparison = p_Left.RawPoints.CompareTo(p_Right.RawPoints);
-        if (p_Left.State  == p_Right.State) return l_RawPointsComparison == 0 ? p_Left.EffectiveScore > p_Right.EffectiveScore : l_RawPointsComparison > 0;
-        if (p_Left.State  == EState.Allowed) return true;
-        if (p_Right.State == EState.Allowed) return false;
+        if (p_Left.m_PassState  == p_Right.m_PassState) return l_RawPointsComparison == 0 ? p_Left.EffectiveScore > p_Right.EffectiveScore : l_RawPointsComparison > 0;
+        if (p_Left.m_PassState  == EPassState.Allowed) return true;
+        if (p_Right.m_PassState == EPassState.Allowed) return false;
 
         return l_RawPointsComparison > 0 || p_Left.EffectiveScore > p_Right.EffectiveScore;
     }
@@ -126,9 +123,9 @@ public class RankedScore : IComparable<RankedScore>
     public static bool operator <=(RankedScore p_Left, RankedScore p_Right)
     {
         var l_RawPointsComparison = p_Left.RawPoints.CompareTo(p_Right.RawPoints);
-        if (p_Left.State  == p_Right.State) return l_RawPointsComparison == 0 ? p_Left.EffectiveScore <= p_Right.EffectiveScore : l_RawPointsComparison <= 0;
-        if (p_Left.State  == EState.Allowed) return false;
-        if (p_Right.State == EState.Allowed) return true;
+        if (p_Left.m_PassState  == p_Right.m_PassState) return l_RawPointsComparison == 0 ? p_Left.EffectiveScore <= p_Right.EffectiveScore : l_RawPointsComparison <= 0;
+        if (p_Left.m_PassState  == EPassState.Allowed) return false;
+        if (p_Right.m_PassState == EPassState.Allowed) return true;
 
         return l_RawPointsComparison < 0 || p_Left.EffectiveScore <= p_Right.EffectiveScore;
     }
@@ -136,9 +133,9 @@ public class RankedScore : IComparable<RankedScore>
     public static bool operator >=(RankedScore p_Left, RankedScore p_Right)
     {
         var l_RawPointsComparison = p_Left.RawPoints.CompareTo(p_Right.RawPoints);
-        if (p_Left.State  == p_Right.State) return p_Left.RawPoints.CompareTo(p_Right.RawPoints) == 0 ? p_Left.EffectiveScore >= p_Right.EffectiveScore : l_RawPointsComparison >= 0;
-        if (p_Left.State  == EState.Allowed) return true;
-        if (p_Right.State == EState.Allowed) return false;
+        if (p_Left.m_PassState  == p_Right.m_PassState) return p_Left.RawPoints.CompareTo(p_Right.RawPoints) == 0 ? p_Left.EffectiveScore >= p_Right.EffectiveScore : l_RawPointsComparison >= 0;
+        if (p_Left.m_PassState  == EPassState.Allowed) return true;
+        if (p_Right.m_PassState == EPassState.Allowed) return false;
 
         return l_RawPointsComparison > 0 || p_Left.EffectiveScore >= p_Right.EffectiveScore;
     }
@@ -162,60 +159,54 @@ public class RankedScoreWithWeight
 
     // ReSharper disable once UseRawString
     private const string JOIN_WEIGHT_QUERY = @"
-        SELECT
-            *,
-            CASE
-                WHEN RScores.State <> 1 THEN 0
-                WHEN Points.IsSlopeEnabled = 1 THEN POWER(Points.SlopeMultiplier, RScores.RowNumber - 1)
-                ELSE 1
-            END AS Weight
-        FROM (
-            SELECT
-                *,
-                ROW_NUMBER() OVER (PARTITION BY PlayerID ORDER BY CASE
-                    WHEN State = 1 THEN 1 -- Prioritize State = 1
-                    ELSE 2 -- For all other states
-                END ASC, RawPoints DESC, EffectiveScore DESC) AS RowNumber
-            FROM RankedScores
-            WHERE PointID = {0}
-        ) AS RScores
-        JOIN (
-            SELECT p.SlopeMultiplier, p.IsSlopeEnabled
-            FROM Points p
-            WHERE p.ID = {0}
-        ) AS Points ON 1=1";
+                SELECT
+                    *,
+                    CASE
+                        WHEN RScores.State <> 1 THEN 0
+                        WHEN Points.IsSlopeEnabled = 1 THEN POWER(Points.SlopeMultiplier, RScores.RowNumber - 1)
+                        ELSE 1
+                    END AS Weight
+                FROM (
+                    SELECT
+                        *,
+                        ROW_NUMBER() OVER (PARTITION BY PlayerID ORDER BY IF(State = 1, 1, 2), RawPoints DESC, EffectiveScore DESC) AS RowNumber
+                    FROM RankedScores
+                    WHERE PointID = {0}
+                ) AS RScores
+                JOIN (
+                    SELECT p.SlopeMultiplier, p.IsSlopeEnabled
+                    FROM Points p
+                    WHERE p.ID = {0}
+                ) AS Points";
 
     /* Might cause issues if the 'CategoryRankedMap' table changes definition */
     // ReSharper disable once UseRawString
     private const string JOIN_WEIGHT_CATEGORY_QUERY = @"
-        SELECT
-            *,
-            CASE
-                WHEN RScores.State <> 1 THEN 0
-                WHEN Points.IsSlopeEnabled = 1 THEN POWER(Points.SlopeMultiplier, RScores.RowNumber - 1)
-                ELSE 1
-            END AS Weight
-        FROM (
-            SELECT
-                *,
-                ROW_NUMBER() OVER (PARTITION BY PlayerID ORDER BY CASE
-                    WHEN State = 1 THEN 1 -- Prioritize State = 1
-                    ELSE 2 -- For all other states
-                END ASC, RawPoints DESC, EffectiveScore DESC) AS RowNumber
-            FROM RankedScores AS RS
-            WHERE RS.PointID = {0}
-            AND EXISTS (
-                SELECT 1
-                FROM CategoryRankedMap AS CRM
-                WHERE CRM.RankedMapsID = RS.RankedMapID
-                AND CRM.CategoriesID = {1}
-            )
-        ) AS RScores
-        JOIN (
-            SELECT p.SlopeMultiplier, p.IsSlopeEnabled
-            FROM Points p
-            WHERE p.ID = {0}
-        ) AS Points ON 1=1";
+                SELECT
+                    *,
+                    CASE
+                        WHEN RScores.State <> 1 THEN 0
+                        WHEN Points.IsSlopeEnabled = 1 THEN POWER(Points.SlopeMultiplier, RScores.RowNumber - 1)
+                        ELSE 1
+                    END AS Weight
+                FROM (
+                    SELECT
+                        *,
+                        ROW_NUMBER() OVER (PARTITION BY PlayerID ORDER BY IF(State = 1, 1, 2), RawPoints DESC, EffectiveScore DESC) AS RowNumber
+                    FROM RankedScores AS RS
+                    WHERE RS.PointID = {0}
+                    AND EXISTS (
+                        SELECT 1
+                        FROM CategoryRankedMap AS CRM
+                        WHERE CRM.RankedMapsID = RS.RankedMapID
+                        AND CRM.CategoriesID = {1}
+                    )
+                ) AS RScores
+                JOIN (
+                    SELECT p.SlopeMultiplier, p.IsSlopeEnabled
+                    FROM Points p
+                    WHERE p.ID = {0}
+                ) AS Points";
 
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
@@ -230,7 +221,7 @@ public class RankedScoreWithWeight
     public uint  SongDifficultyID { get; set; }
     public uint  GuildID          { get; set; }
 
-    public EState State { get; set; }
+    public EPassState m_PassState { get; set; }
 
     public uint  EffectiveScore { get; set; }
     public float RawPoints      { get; set; }
