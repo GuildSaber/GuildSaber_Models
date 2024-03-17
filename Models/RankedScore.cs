@@ -62,7 +62,7 @@ public class RankedScore : IComparable<RankedScore>
     public RankedMap?      RankedMap      { get; set; }
     public Point?          Point          { get; set; } = null;
     public SongDifficulty? SongDifficulty { get; set; }
-    public EPassState          m_PassState          { get; set; }
+    public EPassState      State          { get; set; }
 
     public uint  EffectiveScore   { get; set; }
     public float RawPoints        { get; set; }
@@ -90,10 +90,10 @@ public class RankedScore : IComparable<RankedScore>
         if (other is null) return 1;
 
         var l_RawPointsComparison = RawPoints.CompareTo(other.RawPoints);
-        if (m_PassState == other.m_PassState) return l_RawPointsComparison == 0 ? EffectiveScore.CompareTo(other.EffectiveScore) : l_RawPointsComparison;
-        if (m_PassState == EPassState.Allowed) return -1;
+        if (State == other.State) return l_RawPointsComparison == 0 ? EffectiveScore.CompareTo(other.EffectiveScore) : l_RawPointsComparison;
+        if (State == EPassState.Allowed) return -1;
 
-        return other.m_PassState == EPassState.Allowed ? 1 : l_RawPointsComparison == 0 ? EffectiveScore.CompareTo(other.EffectiveScore) : l_RawPointsComparison;
+        return other.State == EPassState.Allowed ? 1 : l_RawPointsComparison == 0 ? EffectiveScore.CompareTo(other.EffectiveScore) : l_RawPointsComparison;
     }
 
     /* Operator overwrites are used for the sorting, to tell which scores are simply better than others in most situation */
@@ -103,9 +103,9 @@ public class RankedScore : IComparable<RankedScore>
     public static bool operator <(RankedScore p_Left, RankedScore p_Right)
     {
         var l_RawPointsComparison = p_Left.RawPoints.CompareTo(p_Right.RawPoints);
-        if (p_Left.m_PassState  == p_Right.m_PassState) return l_RawPointsComparison == 0 ? p_Left.EffectiveScore < p_Right.EffectiveScore : l_RawPointsComparison < 0;
-        if (p_Left.m_PassState  == EPassState.Allowed) return false;
-        if (p_Right.m_PassState == EPassState.Allowed) return true;
+        if (p_Left.State  == p_Right.State) return l_RawPointsComparison == 0 ? p_Left.EffectiveScore < p_Right.EffectiveScore : l_RawPointsComparison < 0;
+        if (p_Left.State  == EPassState.Allowed) return false;
+        if (p_Right.State == EPassState.Allowed) return true;
 
         return l_RawPointsComparison < 0 || p_Left.EffectiveScore < p_Right.EffectiveScore;
     }
@@ -113,9 +113,9 @@ public class RankedScore : IComparable<RankedScore>
     public static bool operator >(RankedScore p_Left, RankedScore p_Right)
     {
         var l_RawPointsComparison = p_Left.RawPoints.CompareTo(p_Right.RawPoints);
-        if (p_Left.m_PassState  == p_Right.m_PassState) return l_RawPointsComparison == 0 ? p_Left.EffectiveScore > p_Right.EffectiveScore : l_RawPointsComparison > 0;
-        if (p_Left.m_PassState  == EPassState.Allowed) return true;
-        if (p_Right.m_PassState == EPassState.Allowed) return false;
+        if (p_Left.State  == p_Right.State) return l_RawPointsComparison == 0 ? p_Left.EffectiveScore > p_Right.EffectiveScore : l_RawPointsComparison > 0;
+        if (p_Left.State  == EPassState.Allowed) return true;
+        if (p_Right.State == EPassState.Allowed) return false;
 
         return l_RawPointsComparison > 0 || p_Left.EffectiveScore > p_Right.EffectiveScore;
     }
@@ -123,9 +123,9 @@ public class RankedScore : IComparable<RankedScore>
     public static bool operator <=(RankedScore p_Left, RankedScore p_Right)
     {
         var l_RawPointsComparison = p_Left.RawPoints.CompareTo(p_Right.RawPoints);
-        if (p_Left.m_PassState  == p_Right.m_PassState) return l_RawPointsComparison == 0 ? p_Left.EffectiveScore <= p_Right.EffectiveScore : l_RawPointsComparison <= 0;
-        if (p_Left.m_PassState  == EPassState.Allowed) return false;
-        if (p_Right.m_PassState == EPassState.Allowed) return true;
+        if (p_Left.State  == p_Right.State) return l_RawPointsComparison == 0 ? p_Left.EffectiveScore <= p_Right.EffectiveScore : l_RawPointsComparison <= 0;
+        if (p_Left.State  == EPassState.Allowed) return false;
+        if (p_Right.State == EPassState.Allowed) return true;
 
         return l_RawPointsComparison < 0 || p_Left.EffectiveScore <= p_Right.EffectiveScore;
     }
@@ -133,9 +133,9 @@ public class RankedScore : IComparable<RankedScore>
     public static bool operator >=(RankedScore p_Left, RankedScore p_Right)
     {
         var l_RawPointsComparison = p_Left.RawPoints.CompareTo(p_Right.RawPoints);
-        if (p_Left.m_PassState  == p_Right.m_PassState) return p_Left.RawPoints.CompareTo(p_Right.RawPoints) == 0 ? p_Left.EffectiveScore >= p_Right.EffectiveScore : l_RawPointsComparison >= 0;
-        if (p_Left.m_PassState  == EPassState.Allowed) return true;
-        if (p_Right.m_PassState == EPassState.Allowed) return false;
+        if (p_Left.State  == p_Right.State) return p_Left.RawPoints.CompareTo(p_Right.RawPoints) == 0 ? p_Left.EffectiveScore >= p_Right.EffectiveScore : l_RawPointsComparison >= 0;
+        if (p_Left.State  == EPassState.Allowed) return true;
+        if (p_Right.State == EPassState.Allowed) return false;
 
         return l_RawPointsComparison > 0 || p_Left.EffectiveScore >= p_Right.EffectiveScore;
     }
@@ -241,6 +241,6 @@ public class RankedScoreWithWeight
     public static FormattableString GetJoinSqlQuery(uint p_PointID, uint? p_CategoryID = null)
         => p_CategoryID is not null and not 0
             ? FormattableStringFactory.Create(JOIN_WEIGHT_CATEGORY_QUERY, p_PointID, p_CategoryID)
-            : FormattableStringFactory.Create(JOIN_WEIGHT_QUERY, p_PointID);
+            : FormattableStringFactory.Create(JOIN_WEIGHT_QUERY,          p_PointID);
 }
 #endif
