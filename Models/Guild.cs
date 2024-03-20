@@ -79,7 +79,7 @@ public class Guild
     [JsonIgnore] public ICollection<Playlist>?      Playlists            { get; set; }
     [JsonIgnore] public ICollection<Point>?         Points               { get; set; }
     [JsonIgnore] public ICollection<Level>?         Levels               { get; set; }
-    [JsonIgnore] public ICollection<CategoryLevel>? CategoryLevels       { get; set; }
+    [JsonIgnore] public ICollection<LevelOverride>? CategoryLevels       { get; set; }
     [JsonIgnore] public ICollection<GuildBoost>?    GuildBoostCollection { get; set; }
 #endif
     public ulong UnixCreationTime { get; set; }

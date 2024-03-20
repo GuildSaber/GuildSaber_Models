@@ -8,7 +8,7 @@ namespace GuildSaber.Models;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 #if GUILDSABER_SERVER
-[PrimaryKey(nameof(PlayerID), nameof(GuildID))]
+[PrimaryKey(nameof(PlayerID), nameof(GuildID), nameof(CategoryID))]
 #endif
 public class PlayerCategoryLevelStat
 {
@@ -39,6 +39,6 @@ public class PlayerCategoryLevelStat
 
     public float Xp { get; set; }
 
-    public CategoryLevel? Level { get; set; } = null;
-    public CategoryLevel? NextLevel    { get; set; } = null;
+    public LevelOverride? Level { get; set; } = null;
+    public LevelOverride? NextLevel    { get; set; } = null;
 }
